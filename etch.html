@@ -4,41 +4,86 @@
 		<link rel="stylesheet" href="style.css" type="text/css"/>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 		<script>
+		var gridDimension = 16, squareList = {};
 		$(document).ready(function() {
+			buildGrid(gridDimension);
+		});
+		function buildGrid(n) {
 			var main = document.getElementById("main");
+			while (main.firstChild != undefined) {
+				main.removeChild(main.firstChild);
+			}
 			var count = 0, count2 = 0, total = 0;
-			while (count < 16) {
+			while (count < n) {
 				count2 = 0;
-				while (count2 < 16) {
+				while (count2 < n) {
 					total++;
 					var div = document.createElement("DIV");
 					div.setAttribute("id", "div" + total);
+					div.style.width = String(960 / gridDimension) +'px';
+					div.style.height = div.style.width;
 					div.className += "div";
+					squareList[total] = String(getRandomColor(0, 255)) + ", " + String(getRandomColor(0, 255)) + ", " +  String(getRandomColor(0, 255));
 					main.appendChild(div);
 					count2++;
-					console.log(total);
 				}
-				var breakEl = document.createElement("BR");
+				var breakEl = document.createElement("HR");
 				main.appendChild(breakEl);
 				count++;
 			}
 			$(".div").hover(function() {
-				$(this).css("background-color", "#333");
+				if ($(this).css("background-color") == "rgb(255, 255, 255)") {
+					$(this).css("background-color", "rgb("+getSquareListColor(this.id)+")");
+				}
+				else {
+					var nums = getSquareListColor(this.id).split(', ');
+					var rgbVal = $(this).css("background-color").slice(4).replace(')', '').split(", ");
+					var sub = [];
+					sub[0] = Math.ceil(nums[0] / 10);
+					sub[1] = Math.ceil(nums[1] / 10);
+					sub[2] = Math.ceil(nums[2] / 10);
+					for (var i = 0; i < nums.length; i++) {
+						nums[i] = Number(rgbVal[i]) - sub[i];
+					}
+					$(this).css("background-color", "rgb("+String(nums[0])+", "+String(nums[1])+", "+String(nums[2])+")");
+				}
+			}, function() {
+				return;
 			});
-		});
-		function keyPress(e) {
-			if (e.keyCode == 27) {
+		}
+		
+		function getSquareListColor(element) {
+			var idNumber = Number(element.slice(3));
+			for (var p in squareList) 
+				if (p == idNumber) return squareList[p];
+		}
+		
+		function keyPress(e, click) {
+			if (click == undefined) click = false;
+			if (e.keyCode == 27 || click) {
 				var count = 1;
-				while (count <= 256) {
+				while (count <= (gridDimension * gridDimension)) {
 					var el = document.getElementById("div"+count);
 					el.style.backgroundColor = "#fff";
 					count++;
 				}
-			} 
+				var tmp = prompt("Creating new grid -- How many squares per side do you want?");
+				if ((isNaN(tmp))) {
+					prompt("Creating new grid -- How many squares per side do you want?")
+				}
+				else { 
+					gridDimension = tmp != false ? tmp : 16; 
+					buildGrid(gridDimension);
+				}
+			}
+		}
+		function getRandomColor(min, max) {
+    		return Math.floor(Math.random() * (max - min + 1)) + min;
 		}
 		</script>
 	</head>
 	<body onkeydown="keyPress(event);">
+		<input type="button" value="Reset" onclick="keyPress({}, true	)";>
 		<div id="main">
 			
 		</div>
