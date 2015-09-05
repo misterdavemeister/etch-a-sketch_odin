@@ -1,9 +1,5 @@
 body {
-	background: #000;
-}
-
-hr {
-	visibility:hidden; margin-bottom:-1.93%;
+	background: #5C6274;
 }
 
 input {
@@ -32,6 +28,8 @@ input {
 .div {
 	background: #fff;
 	display: inline-block;
+	margin-left: 1px;
+	margin-right: 1px;
 }
 
 .color {

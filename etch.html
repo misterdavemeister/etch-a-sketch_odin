@@ -20,15 +20,13 @@
 					total++;
 					var div = document.createElement("DIV");
 					div.setAttribute("id", "div" + total);
-					div.style.width = String(960 / gridDimension) +'px';
+					div.style.width = String(960 / gridDimension - 2) +'px';
 					div.style.height = div.style.width;
 					div.className += "div";
 					squareList[total] = String(getRandomColor(0, 255)) + ", " + String(getRandomColor(0, 255)) + ", " +  String(getRandomColor(0, 255));
 					main.appendChild(div);
 					count2++;
 				}
-				var breakEl = document.createElement("HR");
-				main.appendChild(breakEl);
 				count++;
 			}
 			$(".div").hover(function() {
